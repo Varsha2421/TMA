@@ -1,0 +1,13 @@
+import React from 'react';
+import { BADGE_STYLES, DOT_COLORS } from '../tokens';
+
+export default function Badge({ children, type = 'gray', dot }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap ${BADGE_STYLES[type]}`}
+    >
+      {dot && <span className={`w-1.5 h-1.5 rounded-full ${DOT_COLORS[type]}`} />}
+      {children}
+    </span>
+  );
+}

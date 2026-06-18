@@ -1,0 +1,211 @@
+import React, { useState } from 'react';
+import {
+  Wallet, CheckCircle2, Users, Clock, AlertTriangle, MapPin, Download, Plus,
+} from 'lucide-react';
+import StatCard from '../components/StatCard';
+import Avatar from '../components/Avatar';
+import Badge from '../components/Badge';
+import ProgressBar from '../components/ProgressBar';
+import { C } from '../tokens';
+
+export default function DashboardPage({ notify, onNavigate }) {
+  const stats = [
+    { icon: Wallet, label: 'TEAM INCENTIVE POOL', value: '$14,250.00', sub: 'Current month forecast', trend: '+12%' },
+    { icon: CheckCircle2, label: 'COMPLETION RATE', value: '94.2%', trend: '-2%', progress: 94 },
+    { icon: Users, label: 'ACTIVE STAFF', value: '38/42', sub: '4 On-leave, 2 Unassigned' },
+    { icon: Clock, label: 'AVG HANDLING TIME', value: '42m 15s', sub: 'Optimized by 4m since last week', dark: true },
+  ];
+
+  const [attention, setAttention] = useState([
+    { initials: 'JD', idx: 0, name: 'John Doe', role: 'Field Agent • Level 2', status: 'No Task Assigned', type: 'red', last: '14 mins ago', perf: 85, action: 'Assign Now' },
+    { initials: 'SM', idx: 1, name: 'Sarah Miller', role: 'Lead Consultant', status: 'Task Completed', type: 'purple', last: 'Just now', perf: 98, action: 'Review Work' },
+    { initials: 'RW', idx: 2, name: 'Robert Wilson', role: 'Analyst • Junior', status: 'No Task Assigned', type: 'red', last: '2 hours ago', perf: 72, action: 'Assign Now' },
+    { initials: 'AK', idx: 3, name: 'Anita Kumar', role: 'System Admin', status: 'Task Completed', type: 'purple', last: '15 mins ago', perf: 91, action: 'Review Work' },
+  ]);
+
+  function handleRowAction(row) {
+    if (row.action === 'Assign Now') {
+      setAttention((prev) =>
+        prev.map((r) =>
+          r.name === row.name ? { ...r, status: 'Task Assigned', type: 'blue', action: 'In Progress' } : r
+        )
+      );
+      notify(`Task assigned to ${row.name}`);
+    } else {
+      notify(`Reviewing ${row.name}'s work`);
+    }
+  }
+
+  const leaderboard = [
+    { name: 'Emily Blunt', amount: '+$450.00', pct: 90 },
+    { name: 'Michael Scott', amount: '+$320.00', pct: 65 },
+    { name: 'Pam Beesly', amount: '+$290.00', pct: 58 },
+  ];
+
+  const activity = [
+    { time: '14:15 PM', text: 'Sarah Miller completed task "Client Audit - Reliance Ind."', status: 'Review pending' },
+    { time: '13:58 PM', text: 'System flagged Robert Wilson for idle time exceeding 30m.', status: 'Alert sent' },
+    { time: '13:30 PM', text: 'Alex Thompson assigned 4 tasks to Night Shift A.', status: 'Processing...' },
+    { time: '13:10 PM', text: 'Incentive Pool updated for Q4 2023.', status: 'Policy viewable' },
+  ];
+
+  return (
+    <>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold text-stone-800">Team Overview</h1>
+          <p className="text-sm text-stone-400 mt-1">
+            Real-time performance and operational status of your direct reports.
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={() => notify('Report exported')}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white hover:opacity-90"
+            style={{ backgroundColor: C.dark }}
+          >
+            <Download size={14} /> Export Report
+          </button>
+          <button
+            onClick={() => onNavigate('task')}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-stone-900 hover:opacity-90"
+            style={{ backgroundColor: C.gold }}
+          >
+            <Plus size={14} /> Assign New Task
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-4 gap-4">
+        {stats.map((s, i) => <StatCard key={i} {...s} />)}
+      </div>
+
+      <div className="grid grid-cols-3 gap-6">
+        {/* Attention Required */}
+        <div className="col-span-2 bg-white rounded-2xl border p-5" style={{ borderColor: C.border }}>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <AlertTriangle size={16} className="text-amber-500" />
+              <h2 className="font-semibold text-stone-800">Attention Required</h2>
+            </div>
+            <Badge type="red">{attention.filter((r) => r.action === 'Assign Now').length} Action Items</Badge>
+          </div>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-left text-xs text-stone-400 border-b" style={{ borderColor: C.border }}>
+                <th className="pb-2 font-medium">EMPLOYEE</th>
+                <th className="pb-2 font-medium">CURRENT STATUS</th>
+                <th className="pb-2 font-medium">LAST ACTION</th>
+                <th className="pb-2 font-medium">PERFORMANCE</th>
+                <th className="pb-2 font-medium text-right">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {attention.map((r, i) => (
+                <tr key={i} className="border-b last:border-0" style={{ borderColor: C.border }}>
+                  <td className="py-3">
+                    <div className="flex items-center gap-3">
+                      <Avatar initials={r.initials} idx={r.idx} size="sm" />
+                      <div>
+                        <div className="font-medium text-stone-800">{r.name}</div>
+                        <div className="text-xs text-stone-400">{r.role}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><Badge type={r.type}>{r.status}</Badge></td>
+                  <td className="text-stone-500">{r.last}</td>
+                  <td className="w-32">
+                    <div className="flex items-center gap-2">
+                      <ProgressBar value={r.perf} />
+                      <span className="text-xs text-stone-500 w-9">{r.perf}%</span>
+                    </div>
+                  </td>
+                  <td className="text-right">
+                    <button
+                      onClick={() => handleRowAction(r)}
+                      disabled={r.action === 'In Progress'}
+                      className="text-xs font-semibold px-3 py-1.5 rounded-lg hover:opacity-80 disabled:opacity-60"
+                      style={{ backgroundColor: '#fdf4e3', color: C.goldSoft }}
+                    >
+                      {r.action}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Right column */}
+        <div className="space-y-6">
+          {/* Regional Spread */}
+          <div className="rounded-2xl p-5 text-white" style={{ backgroundColor: C.dark }}>
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="font-semibold">Regional Spread</h3>
+              <span className="flex items-center gap-1 text-xs text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />LIVE
+              </span>
+            </div>
+            <p className="text-xs text-stone-400 mb-4">Live tracking of on-field agents</p>
+            <button
+              onClick={() => onNavigate('tracking')}
+              className="w-full h-32 rounded-lg bg-stone-800/60 flex items-center justify-center mb-3 hover:bg-stone-800/80"
+            >
+              <MapPin size={24} className="text-amber-400" />
+            </button>
+            <div className="flex items-center justify-between bg-stone-800/60 rounded-lg p-3">
+              <span className="text-sm">Active Agents</span>
+              <span className="text-sm font-semibold text-amber-400">14 Online</span>
+            </div>
+          </div>
+
+          {/* Leaderboard */}
+          <div className="bg-white rounded-2xl border p-5" style={{ borderColor: C.border }}>
+            <h3 className="font-semibold text-stone-800">Leaderboard</h3>
+            <p className="text-xs text-stone-400 mb-4">Incentive projections this week</p>
+            <div className="space-y-3">
+              {leaderboard.map((l, i) => (
+                <div key={i}>
+                  <div className="flex items-center justify-between text-sm mb-1">
+                    <span className="flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-full bg-stone-100 text-xs flex items-center justify-center font-semibold">
+                        {i + 1}
+                      </span>
+                      {l.name}
+                    </span>
+                    <span className="font-semibold text-emerald-600">{l.amount}</span>
+                  </div>
+                  <ProgressBar value={l.pct} />
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={() => onNavigate('incentive')}
+              className="w-full mt-4 text-sm font-medium py-2 rounded-lg hover:opacity-80"
+              style={{ color: C.goldSoft, backgroundColor: '#fdf4e3' }}
+            >
+              Full Incentive Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Activity */}
+      <div className="bg-white rounded-2xl border p-5" style={{ borderColor: C.border }}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold text-stone-800">Operational Activity</h3>
+          <span className="text-xs text-stone-400">Last updated: 14:22:15</span>
+        </div>
+        <div className="grid grid-cols-4 gap-4">
+          {activity.map((a, i) => (
+            <div key={i} className="border rounded-xl p-3" style={{ borderColor: C.border }}>
+              <div className="text-xs text-stone-400 mb-1">{a.time}</div>
+              <div className="text-sm text-stone-700 mb-2">{a.text}</div>
+              <div className="text-xs font-medium" style={{ color: C.goldSoft }}>{a.status}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}

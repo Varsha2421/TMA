@@ -1,0 +1,13 @@
+import React from 'react';
+import { AVATAR_COLORS } from '../tokens';
+
+export default function Avatar({ initials, idx = 0, size = 'md' }) {
+  const sizeCls = size === 'sm' ? 'w-8 h-8 text-xs' : 'w-10 h-10 text-sm';
+  return (
+    <div
+      className={`${sizeCls} rounded-full flex items-center justify-center font-semibold shrink-0 ${AVATAR_COLORS[idx % AVATAR_COLORS.length]}`}
+    >
+      {initials}
+    </div>
+  );
+}

@@ -1,0 +1,47 @@
+// Design tokens
+export const C = {
+  sidebar: '#1d1b18',
+  sidebarBorder: '#2f2c28',
+  gold: '#dba23a',
+  goldSoft: '#c08a2e',
+  page: '#ebe9e3',
+  dark: '#262320',
+  border: '#e7e4dd',
+};
+
+export const AVATAR_COLORS = [
+  'bg-indigo-100 text-indigo-700',
+  'bg-pink-100 text-pink-700',
+  'bg-amber-100 text-amber-700',
+  'bg-emerald-100 text-emerald-700',
+  'bg-blue-100 text-blue-700',
+  'bg-purple-100 text-purple-700',
+];
+
+export const BADGE_STYLES = {
+  red: 'bg-red-50 text-red-600',
+  purple: 'bg-violet-50 text-violet-600',
+  green: 'bg-emerald-50 text-emerald-600',
+  gray: 'bg-stone-100 text-stone-500',
+  blue: 'bg-blue-50 text-blue-600',
+  amber: 'bg-amber-50 text-amber-600',
+};
+
+export const DOT_COLORS = {
+  red: 'bg-red-500',
+  purple: 'bg-violet-500',
+  green: 'bg-emerald-500',
+  gray: 'bg-stone-400',
+  blue: 'bg-blue-500',
+  amber: 'bg-amber-500',
+};
+
+export const SEARCH_PLACEHOLDERS = {
+  dashboard: 'Search tasks, employees, or metrics...',
+  employee: 'Search team members...',
+  task: 'Search tasks, employees, or clients...',
+  client: 'Search clients, projects, or tasks...',
+  tracking: 'Search employees by name or ID...',
+  analytics: 'Search analytics, employees, or tasks...',
+  incentive: 'Search incentives, claims, or team members...',
+};

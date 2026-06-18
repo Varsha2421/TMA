@@ -1,0 +1,79 @@
+import React, { useState } from 'react';
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { C } from '../tokens';
+
+export default function LoginPage({ onLogin }) {
+  const [email, setEmail] = useState('admin@complianceos.com');
+  const [password, setPassword] = useState('securepass');
+  const [showPw, setShowPw] = useState(false);
+  const [error, setError] = useState('');
+
+  function handleSubmit() {
+    if (!email.trim() || !password.trim()) {
+      setError('Please enter both email and password.');
+      return;
+    }
+    setError('');
+    onLogin();
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#e5e5e2' }}>
+      <div className="bg-white rounded-2xl shadow-xl p-10 w-full max-w-md">
+        <h1 className="text-2xl font-bold text-stone-800 mb-8">Welcome Back</h1>
+
+        <div className="mb-5">
+          <label className="block text-xs font-semibold tracking-wider text-stone-500 mb-2">
+            EMAIL ADDRESS
+          </label>
+          <div className="relative">
+            <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-stone-200 text-sm outline-none focus:ring-2 focus:ring-amber-300"
+            />
+          </div>
+        </div>
+
+        <div className="mb-2">
+          <label className="block text-xs font-semibold tracking-wider text-stone-500 mb-2">
+            PASSWORD
+          </label>
+          <div className="relative">
+            <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+            <input
+              type={showPw ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+              className="w-full pl-9 pr-10 py-2.5 rounded-lg border border-stone-200 text-sm outline-none focus:ring-2 focus:ring-amber-300"
+            />
+            <button
+              onClick={() => setShowPw(!showPw)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400"
+            >
+              {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
+        </div>
+
+        {error && <p className="text-xs text-red-500 mb-4">{error}</p>}
+        {!error && <div className="mb-6" />}
+
+        <button
+          onClick={handleSubmit}
+          className="w-full py-3 rounded-lg font-semibold flex items-center justify-center gap-2 text-stone-900 hover:opacity-90 transition-opacity"
+          style={{ backgroundColor: C.gold }}
+        >
+          Sign In to Dashboard <ArrowRight size={16} />
+        </button>
+
+        <div className="mt-6 pt-5 border-t border-stone-100 text-center text-xs text-stone-400 space-y-1">
+          <p>Secured with enterprise-grade SSL encryption.</p>
+          <p>Authorized access only. Unauthorized attempts will be logged.</p>
+        </div>
+      </div>
+    </div>
+  );
+}

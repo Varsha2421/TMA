@@ -1,0 +1,24 @@
+import React, { useState } from 'react';
+import Sidebar from './Sidebar';
+import TopBar from './TopBar';
+import { C } from '../tokens';
+
+export default function Layout({ active, onChange, onLogout, user, role, searchPlaceholder, children }) {
+  const [query, setQuery] = useState('');
+
+  return (
+    <div className="flex min-h-screen" style={{ backgroundColor: C.page }}>
+      <Sidebar active={active} onChange={onChange} onLogout={onLogout} />
+      <div className="flex-1 min-w-0">
+        <TopBar
+          name={user}
+          role={role}
+          query={query}
+          onQuery={setQuery}
+          placeholder={searchPlaceholder}
+        />
+        <main className="p-8 space-y-6">{children}</main>
+      </div>
+    </div>
+  );
+}
